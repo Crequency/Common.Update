@@ -51,7 +51,7 @@ namespace Common.Update.Checker
         /// <param name="path">文件路径</param>
         public Checker AppendIncludeFile(string path)
         {
-            string rele = Path.GetRelativePath(_rootDir, path);
+            string rele = Path.GetRelativePath(_rootDir, Path.GetFullPath(path));
             if (!_includefile.Contains(rele)) _includefile.Add(rele);
             return this;
         }
