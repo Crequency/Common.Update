@@ -5,6 +5,8 @@ VisualStudioVersion = 17.3.32901.215
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Update.Checker", "Common.Update.Checker\Common.Update.Checker.csproj", "{22F7DCDC-A2BC-4466-B411-CA99E5990EAF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Update.Checker.Test", "Common.Update.Checker.Test\Common.Update.Checker.Test.csproj", "{6DBBCECC-7CF5-4742-A5E6-812BC03644F1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{22F7DCDC-A2BC-4466-B411-CA99E5990EAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{22F7DCDC-A2BC-4466-B411-CA99E5990EAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{22F7DCDC-A2BC-4466-B411-CA99E5990EAF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6DBBCECC-7CF5-4742-A5E6-812BC03644F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6DBBCECC-7CF5-4742-A5E6-812BC03644F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6DBBCECC-7CF5-4742-A5E6-812BC03644F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6DBBCECC-7CF5-4742-A5E6-812BC03644F1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
