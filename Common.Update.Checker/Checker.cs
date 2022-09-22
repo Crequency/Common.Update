@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.ComTypes;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
@@ -21,6 +19,8 @@ namespace Common.Update.Checker
 
         private string _rootDir = string.Empty;
 
+        private bool _lock = false;
+
         public Checker()
         {
 
@@ -30,6 +30,7 @@ namespace Common.Update.Checker
         /// 追加忽略的格式
         /// </summary>
         /// <param name="format">格式, 形如 .txt</param>
+        /// <returns>检查器</returns>
         public Checker AppendIgnoreFormat(string format)
         {
             if (!_ignoreformat.Contains(format)) _ignoreformat.Add(format.ToLower());
@@ -40,15 +41,17 @@ namespace Common.Update.Checker
         /// 追加一系列忽略的格式
         /// </summary>
         /// <param name="formats">格式们</param>
-        public void AppendIgnoreFormats(List<string> formats)
+        public Checker AppendIgnoreFormats(List<string> formats)
         {
-            foreach (string format in formats) AppendIgnoreFormat(format);
+            foreach (string format in formats) _ = AppendIgnoreFormat(format);
+            return this;
         }
 
         /// <summary>
         /// 追加额外包含的文件
         /// </summary>
         /// <param name="path">文件路径</param>
+        /// <returns>检查器</returns>
         public Checker AppendIncludeFile(string path)
         {
             string rele = Path.GetRelativePath(_rootDir, Path.GetFullPath(path));
@@ -64,6 +67,29 @@ namespace Common.Update.Checker
         public Checker SetRootDirectory(string RootDirectory)
         {
             _rootDir = Path.GetFullPath(RootDirectory);
+            return this;
+        }
+
+        /// <summary>
+        /// 锁定自己
+        /// </summary>
+        /// <returns>检查器</returns>
+        public Checker Lock()
+        {
+            _lock = true;
+            return this;
+        }
+
+        /// <summary>
+        /// 解锁
+        /// </summary>
+        /// <returns>检查器</returns>
+        public Checker Unlock()
+        {
+            _hash_md5.Clear();
+            _hash_sha1.Clear();
+            _includefile.Clear();
+            _lock = false;
             return this;
         }
 
@@ -103,6 +129,18 @@ namespace Common.Update.Checker
                 stream.WriteLine();
             }
             stream.Flush();
+        }
+
+        /// <summary>
+        /// 获取计算结果
+        /// </summary>
+        /// <returns>键: 文件相对路径, 值: 元组 - 前者为 MD5 值 - 后者为 SHA1 值</returns>
+        public Dictionary<string, (string, string)> GetCalculateResult()
+        {
+            Dictionary<string, (string, string)> result = new Dictionary<string, (string, string)>();
+            foreach (var item in _includefile)
+                result.Add(item, (_hash_md5[item], _hash_sha1[item]));
+            return result;
         }
 
         /// <summary>
@@ -164,6 +202,8 @@ namespace Common.Update.Checker
         /// </summary>
         public void Calculate()
         {
+            if (_lock) throw new Exception("Can't calculate when locked.");
+
             //  4 个文件一组进行异步计算
             for (int i = 0; i < _includefile.Count; i += 4)
                 CalcRegion(i, Math.Min(i + 4, _includefile.Count));
@@ -171,6 +211,8 @@ namespace Common.Update.Checker
             CalcRegion(_includefile.Count - (_includefile.Count % 4), _includefile.Count);
 
             while (finished_count != _includefile.Count) { }
+
+            _ = Lock();
         }
 
         /// <summary>
