@@ -4,7 +4,7 @@ namespace Common.Update.Checker.Test
     public class Checker_Test
     {
         [TestMethod]
-        public void 测试一下()
+        public void Test_Checker_基础功能()
         {
             string root = @"D:\tmp\";
 
@@ -12,7 +12,7 @@ namespace Common.Update.Checker.Test
                 .SetRootDirectory(root)
                 .AppendIgnoreFormat(".zip")
                 .AppendIncludeFile($"{root}/test.kxp");
-            checker.AppendIgnoreFormats(new()
+            _ = checker.AppendIgnoreFormats(new()
             {
                 ".mp4", ".mp3", ".jpg", ".png", ".xml", ".kxp"
             });
