@@ -1,0 +1,51 @@
+name: Build and Publish Packages
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+  workflow_dispatch:
+
+jobs:
+  build-on-ubuntu:
+    runs-on: ubuntu-latest
+    if: "contains(github.event.head_commit.message, '[Publish Packages]')"
+
+    steps:
+
+      - uses: actions/checkout@v3
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: '6.0.x'
+          include-prerelease: false
+
+      - name: Add to GitHub Repo
+        run: |
+          nuget sources add -name github -Source https://nuget.pkg.github.com/Crequency/index.json -Username Crequency -Password ${{ secrets.GitHubToken }}
+
+      - name: Install NuGet
+        uses: nuget/setup-nuget@v1
+        with:
+          nuget-version: '6.x'
+
+      - name: Build and Publish `Common.Update.Checker`
+        if: contains(github.event.head_commit.message, '[Common.Update.Checker]') || contains(github.event.head_commit.message, '[All]')
+        run: |
+          cd "Common.Update.Checker"
+          dotnet build -c Release
+          nuget push ./bin/Release/*.nupkg -Source https://api.nuget.org/v3/index.json -SkipDuplicate -ApiKey ${{ secrets.NugetKey }} -NoSymbol
+          nuget push ./bin/Release/*.nupkg -Source github -SkipDuplicate
+          cd ".."
+
+      - name: Build and Publish `Common.Update.Replacer`
+        if: contains(github.event.head_commit.message, '[Common.Update.Replacer]') || contains(github.event.head_commit.message, '[All]')
+        run: |
+          cd "Common.Update.Replacer"
+          dotnet build -c Release
+          nuget push ./bin/Release/*.nupkg -Source https://api.nuget.org/v3/index.json -SkipDuplicate -ApiKey ${{ secrets.NugetKey }} -NoSymbol
+          nuget push ./bin/Release/*.nupkg -Source github -SkipDuplicate
+          cd ".."
