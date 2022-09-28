@@ -296,12 +296,13 @@ namespace Common.Update.Checker
                 foreach (var item in task)
                 {
                     byte[] bytes = File.ReadAllBytes(Path.GetFullPath($"{_rootDir}/{item}"));
+                    string md5 = GetMD5(bytes), sha1 = GetSHA1(bytes);
                     lock (_lockobject)
                     {
-                        _hash_md5.Add(item, GetMD5(bytes));
-                        _hash_sha1.Add(item, GetSHA1(bytes));
+                        _hash_md5.Add(item, md5);
+                        _hash_sha1.Add(item, sha1);
+                        ++finished_count;
                     }
-                    Interlocked.Increment(ref finished_count);
                 }
             }).Start();
         }
