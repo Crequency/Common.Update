@@ -9,6 +9,14 @@ namespace Common.Update.Checker
 {
     public class Checker
     {
+
+        public Checker()
+        {
+
+        }
+
+        #region 基础字段定义
+
         private readonly List<string> _ignoreformat = new List<string>();
 
         private readonly List<string> _includefile = new List<string>();
@@ -23,10 +31,9 @@ namespace Common.Update.Checker
 
         private bool _lock = false;
 
-        public Checker()
-        {
+        #endregion
 
-        }
+        #region 初始化设置系列方法
 
         /// <summary>
         /// 追加忽略的格式
@@ -84,6 +91,10 @@ namespace Common.Update.Checker
             return this;
         }
 
+        #endregion
+
+        #region 安全性相关方法
+
         /// <summary>
         /// 锁定自己
         /// </summary>
@@ -103,9 +114,14 @@ namespace Common.Update.Checker
             _hash_md5.Clear();
             _hash_sha1.Clear();
             _includefile.Clear();
+            finished_count = 0;
             _lock = false;
             return this;
         }
+
+        #endregion
+
+        #region 打印参数系列方法
 
         /// <summary>
         /// 打印忽略的格式列表
@@ -156,6 +172,10 @@ namespace Common.Update.Checker
             stream.Flush();
         }
 
+        #endregion
+
+        #region 获取相关数据系列方法
+
         /// <summary>
         /// 获取计算结果
         /// </summary>
@@ -173,6 +193,10 @@ namespace Common.Update.Checker
         /// </summary>
         /// <returns>(已计算的文件数, 总共需计算的文件数)</returns>
         public (int, int) GetProgress() => (finished_count, _includefile.Count);
+
+        #endregion
+
+        #region 扫描文件系列方法
 
         /// <summary>
         /// 开始扫描
@@ -202,6 +226,10 @@ namespace Common.Update.Checker
             }
         }
 
+        #endregion
+
+        #region 计算散列相关方法
+
         /// <summary>
         /// 获取 MD5 值
         /// </summary>
@@ -226,6 +254,10 @@ namespace Common.Update.Checker
             var hash = sha1.ComputeHash(bytes);
             return Encoding.UTF8.GetString(hash);
         }
+
+        #endregion
+
+        #region 执行计算散列相关方法与字段
 
         private int finished_count = 0;
 
@@ -268,5 +300,7 @@ namespace Common.Update.Checker
                 }
             }).Start();
         }
+
+        #endregion
     }
 }
