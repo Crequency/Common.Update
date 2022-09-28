@@ -119,6 +119,17 @@ namespace Common.Update.Checker
         }
 
         /// <summary>
+        /// 打印忽略的文件夹列表
+        /// </summary>
+        /// <param name="stream">输出流</param>
+        public void PrintIgnoredFolders(TextWriter stream)
+        {
+            foreach (var item in _ignorefolder)
+                stream.WriteLine(item);
+            stream.Flush();
+        }
+
+        /// <summary>
         /// 打印扫描到的文件
         /// </summary>
         /// <param name="stream">输出流</param>
