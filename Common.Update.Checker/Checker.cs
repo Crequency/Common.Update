@@ -169,6 +169,12 @@ namespace Common.Update.Checker
         }
 
         /// <summary>
+        /// 获取计算进度
+        /// </summary>
+        /// <returns>(已计算的文件数, 总共需计算的文件数)</returns>
+        public (int, int) GetProgress() => (finished_count, _includefile.Count);
+
+        /// <summary>
         /// 开始扫描
         /// </summary>
         public void Scan() => ScanFolder(_rootDir);
