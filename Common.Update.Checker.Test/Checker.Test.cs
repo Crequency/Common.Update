@@ -11,6 +11,7 @@ namespace Common.Update.Checker.Test
             Checker checker = new Checker()
                 .SetRootDirectory(root)
                 .AppendIgnoreFormat(".zip")
+                .AppendIgnoreFolder("ignore")
                 .AppendIncludeFile($"{root}/test.kxp");
             _ = checker.AppendIgnoreFormats(new()
             {
