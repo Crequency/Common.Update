@@ -5,9 +5,9 @@ namespace Common.Update.Replacer
 {
     public class Replacer
     {
-        private static string _rootDir = string.Empty;
+        private string _rootDir = string.Empty;
 
-        private static string _newFilesDir = string.Empty;
+        private string _newFilesDir = string.Empty;
 
         public Replacer()
         {
