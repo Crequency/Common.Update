@@ -28,5 +28,28 @@ namespace Common.Update.Checker.Test
 
             checker.PrintFilesHashed(Console.Out);
         }
+
+        [TestMethod]
+        public void ×¨Ïî²âÊÔ()
+        {
+            string wd = @"E:\Development\Projects\Crequency\KitX\KitX Build\Dashboard\Debug\net6.0";
+            string ld = $"{wd}/Languages";
+            Checker checker = new Checker()
+                .SetRootDirectory(wd)
+                .AppendIgnoreFolder("Config")
+                .AppendIgnoreFolder("Languages")
+                .AppendIgnoreFolder("Log")
+                .AppendIncludeFile($"{ld}/zh-cn.axaml")
+                .AppendIncludeFile($"{ld}/zh-cnt.axaml")
+                .AppendIncludeFile($"{ld}/en-us.axaml")
+                .AppendIncludeFile($"{ld}/ja-jp.axaml");
+            checker.Scan();
+
+            checker.PrintScannedFiles(Console.Out);
+
+            checker.Calculate();
+
+            checker.PrintFilesHashed(Console.Out);
+        }
     }
 }

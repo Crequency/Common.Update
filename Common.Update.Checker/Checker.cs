@@ -31,6 +31,8 @@ namespace Common.Update.Checker
 
         private bool _lock = false;
 
+        private static object _lockobject = new object();
+
         #endregion
 
         #region 初始化设置系列方法
@@ -294,8 +296,11 @@ namespace Common.Update.Checker
                 foreach (var item in task)
                 {
                     byte[] bytes = File.ReadAllBytes(Path.GetFullPath($"{_rootDir}/{item}"));
-                    _hash_md5.Add(item, GetMD5(bytes));
-                    _hash_sha1.Add(item, GetSHA1(bytes));
+                    lock (_lockobject)
+                    {
+                        _hash_md5.Add(item, GetMD5(bytes));
+                        _hash_sha1.Add(item, GetSHA1(bytes));
+                    }
                     Interlocked.Increment(ref finished_count);
                 }
             }).Start();
