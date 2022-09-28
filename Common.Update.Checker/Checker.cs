@@ -11,7 +11,9 @@ namespace Common.Update.Checker
     {
         private readonly List<string> _ignoreformat = new List<string>();
 
-        public readonly List<string> _includefile = new List<string>();
+        private readonly List<string> _includefile = new List<string>();
+
+        private readonly List<string> _ignorefolder = new List<string>();
 
         private readonly Dictionary<string, string> _hash_md5 = new Dictionary<string, string>();
 
@@ -56,6 +58,18 @@ namespace Common.Update.Checker
         {
             string rele = Path.GetRelativePath(_rootDir, Path.GetFullPath(path));
             if (!_includefile.Contains(rele)) _includefile.Add(rele);
+            return this;
+        }
+
+        /// <summary>
+        /// 追加忽略的文件夹及其子文件夹和子文件
+        /// </summary>
+        /// <param name="path">文件夹路径</param>
+        /// <returns>检查器</returns>
+        public Checker AppendIgnoreFolder(string path)
+        {
+            string fpath = Path.GetFullPath($"{_rootDir}/{path}");
+            if (!_ignorefolder.Contains(fpath)) _ignorefolder.Add(fpath);
             return this;
         }
 
@@ -166,6 +180,7 @@ namespace Common.Update.Checker
             }
             foreach (var item in dir.GetDirectories())
             {
+                if (_ignorefolder.Contains(Path.GetFullPath(item.FullName))) continue;
                 ScanFolder(item.FullName);
             }
         }
