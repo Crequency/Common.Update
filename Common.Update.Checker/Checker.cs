@@ -31,7 +31,11 @@ namespace Common.Update.Checker
 
         private bool _lock = false;
 
-        private static object _lockobject = new object();
+        private bool _transHash2Str = false;
+
+        private static readonly object _lockobject = new object();
+
+        private int _perThreadFilesCount = 4;
 
         #endregion
 
@@ -90,6 +94,28 @@ namespace Common.Update.Checker
         public Checker SetRootDirectory(string RootDirectory)
         {
             _rootDir = Path.GetFullPath(RootDirectory);
+            return this;
+        }
+
+        /// <summary>
+        /// 设置单个线程处理文件数量上限
+        /// </summary>
+        /// <param name="ptfc">单个线程处理文件数量上限</param>
+        /// <returns>检查器</returns>
+        public Checker SetPerThreadFilesCount(int ptfc)
+        {
+            _perThreadFilesCount = ptfc;
+            return this;
+        }
+
+        /// <summary>
+        /// 设置是否转换散列值为字符串
+        /// </summary>
+        /// <param name="value">指示是否转换</param>
+        /// <returns>检查器</returns>
+        public Checker SetTransHash2String(bool value)
+        {
+            _transHash2Str = value;
             return this;
         }
 
@@ -217,8 +243,7 @@ namespace Common.Update.Checker
                 if (!_ignoreformat.Contains(Path.GetExtension(item.FullName).ToLower()))
                 {
                     string path = Path.GetRelativePath(_rootDir, item.FullName);
-                    if (!_includefile.Contains(path))
-                        _includefile.Add(path);
+                    if (!_includefile.Contains(path)) _includefile.Add(path);
                 }
             }
             foreach (var item in dir.GetDirectories())
@@ -236,25 +261,33 @@ namespace Common.Update.Checker
         /// 获取 MD5 值
         /// </summary>
         /// <param name="bytes">要计算的数据</param>
+        /// <param name="trans">是否转换格式</param>
         /// <returns>MD5 值</returns>
-        private static string GetMD5(byte[] bytes)
+        private static string GetMD5(byte[] bytes, bool trans = false)
         {
             MD5 md5 = MD5.Create();
             byte[] result = md5.ComputeHash(bytes);
+            StringBuilder sb = new StringBuilder();
+            if (trans) foreach (var bt in result) sb.Append(bt.ToString("x2"));
+            else sb.Append(Encoding.UTF8.GetString(result));
             md5.Dispose();
-            return Encoding.UTF8.GetString(result);
+            return sb.ToString();
         }
 
         /// <summary>
         /// 获取 SHA1 值
         /// </summary>
         /// <param name="bytes">计算对象</param>
+        /// <param name="trans">是否转换格式</param>
         /// <returns>SHA1 值</returns>
-        private static string GetSHA1(byte[] bytes)
+        private static string GetSHA1(byte[] bytes, bool trans = false)
         {
             using SHA1Managed sha1 = new SHA1Managed();
             var hash = sha1.ComputeHash(bytes);
-            return Encoding.UTF8.GetString(hash);
+            StringBuilder sb = new StringBuilder();
+            if (trans) foreach (var bt in hash) sb.Append(bt.ToString("x2"));
+            else sb.Append(Encoding.UTF8.GetString(hash));
+            return sb.ToString();
         }
 
         #endregion
@@ -270,11 +303,15 @@ namespace Common.Update.Checker
         {
             if (_lock) throw new Exception("Can't calculate when locked.");
 
-            //  4 个文件一组进行异步计算
-            for (int i = 0; i < _includefile.Count; i += 4)
-                CalcRegion(i, Math.Min(i + 4, _includefile.Count));
+            int groupsCount = _includefile.Count / _perThreadFilesCount;
+            int leftFilesCount = _includefile.Count % _perThreadFilesCount;
+
+            //  n 个文件一组进行异步计算
+            for (int i = 0; i < groupsCount; ++i)
+                CalcRegion(i * _perThreadFilesCount, i * _perThreadFilesCount + _perThreadFilesCount);
             //  剩余文件单独一组计算
-            CalcRegion(_includefile.Count - (_includefile.Count % 4), _includefile.Count);
+            if (leftFilesCount != 0)
+                CalcRegion(_includefile.Count - leftFilesCount, _includefile.Count);
 
             while (finished_count != _includefile.Count) { }
 
@@ -289,14 +326,13 @@ namespace Common.Update.Checker
         private void CalcRegion(int s, int e)
         {
             List<string> task = new List<string>();
-            for (int j = s; j < e; ++j)
-                task.Add(_includefile[j]);
+            for (int j = s; j < e; ++j) task.Add(_includefile[j]);
             new Thread(() =>
             {
                 foreach (var item in task)
                 {
                     byte[] bytes = File.ReadAllBytes(Path.GetFullPath($"{_rootDir}/{item}"));
-                    string md5 = GetMD5(bytes), sha1 = GetSHA1(bytes);
+                    string md5 = GetMD5(bytes, _transHash2Str), sha1 = GetSHA1(bytes, _transHash2Str);
                     lock (_lockobject)
                     {
                         _hash_md5.Add(item, md5);
