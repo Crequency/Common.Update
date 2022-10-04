@@ -49,3 +49,12 @@ jobs:
           nuget push ./bin/Release/*.nupkg -Source https://api.nuget.org/v3/index.json -SkipDuplicate -ApiKey ${{ secrets.NugetKey }} -NoSymbol
           nuget push ./bin/Release/*.nupkg -Source github -SkipDuplicate
           cd ".."
+
+      - name: Build and Publish `Common.Update.Manual`
+        if: contains(github.event.head_commit.message, '[Common.Update.Manual]') || contains(github.event.head_commit.message, '[All]')
+        run: |
+          cd "Common.Update.Manual"
+          dotnet build -c Release
+          nuget push ./bin/Release/*.nupkg -Source https://api.nuget.org/v3/index.json -SkipDuplicate -ApiKey ${{ secrets.NugetKey }} -NoSymbol
+          nuget push ./bin/Release/*.nupkg -Source github -SkipDuplicate
+          cd ".."
