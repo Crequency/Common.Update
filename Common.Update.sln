@@ -13,6 +13,30 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Update.Replacer.Test
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Update.Manual", "Common.Update.Manual\Common.Update.Manual.csproj", "{A406ACA4-8622-476B-B4FF-8F49882E69CD}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "解决方案项", "解决方案项", "{47F552FC-212C-4DB6-8C10-A599B0C46ED0}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{1F03ABCC-D919-40A1-9250-4E8EB9C8D28A}"
+	ProjectSection(SolutionItems) = preProject
+		.github\FUNDING.yml = .github\FUNDING.yml
+		.github\pull_request_template.md = .github\pull_request_template.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{61DA94A6-6FDB-453A-A61E-68300AF883E4}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\build.yml = .github\workflows\build.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ISSUE_TEMPLATE", "ISSUE_TEMPLATE", "{99E8CF02-2AA3-45C5-8633-B6EC730BC775}"
+	ProjectSection(SolutionItems) = preProject
+		.github\ISSUE_TEMPLATE\---bug-report.md = .github\ISSUE_TEMPLATE\---bug-report.md
+		.github\ISSUE_TEMPLATE\---feature-request.md = .github\ISSUE_TEMPLATE\---feature-request.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,6 +66,11 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{1F03ABCC-D919-40A1-9250-4E8EB9C8D28A} = {47F552FC-212C-4DB6-8C10-A599B0C46ED0}
+		{61DA94A6-6FDB-453A-A61E-68300AF883E4} = {1F03ABCC-D919-40A1-9250-4E8EB9C8D28A}
+		{99E8CF02-2AA3-45C5-8633-B6EC730BC775} = {1F03ABCC-D919-40A1-9250-4E8EB9C8D28A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9323210F-0294-43A2-98FA-8E953723737A}
