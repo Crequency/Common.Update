@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Update.Replacer", "C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Update.Replacer.Test", "Common.Update.Replacer.Test\Common.Update.Replacer.Test.csproj", "{7B8E514F-2D59-4021-BC5F-2A7B5D3153B3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Update.Manual", "Common.Update.Manual\Common.Update.Manual.csproj", "{A406ACA4-8622-476B-B4FF-8F49882E69CD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{7B8E514F-2D59-4021-BC5F-2A7B5D3153B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7B8E514F-2D59-4021-BC5F-2A7B5D3153B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7B8E514F-2D59-4021-BC5F-2A7B5D3153B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A406ACA4-8622-476B-B4FF-8F49882E69CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A406ACA4-8622-476B-B4FF-8F49882E69CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A406ACA4-8622-476B-B4FF-8F49882E69CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A406ACA4-8622-476B-B4FF-8F49882E69CD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
