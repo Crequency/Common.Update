@@ -3,7 +3,7 @@ using Common.Update.Manual;
 using System.Text.Json;
 
 Console.WriteLine("Common.Update.Manual");
-Console.WriteLine("v0.0.1");
+Console.WriteLine("v1.0.0.1");
 
 var ask = (string tip, ConsoleColor? cc) =>
 {
