@@ -30,7 +30,7 @@ Checker checker = new Checker()
 
 int _ignoreFoldersCount = int4(ask("Ignore Folders Count: ", null), 0);
 for (int i = 0; i < _ignoreFoldersCount; i++)
-    _ = checker.AppendIgnoreFolder(Path.GetFullPath(ask($"_ignoreFolder{i}:\t", null)));
+    _ = checker.AppendIgnoreFolder(ask($"_ignoreFolder{i}:\t", null));
 
 int _ignoreFormatsCount = int4(ask("Ignore Formats Count: ", null), 0);
 for (int i = 0; i < _ignoreFormatsCount; i++)
@@ -75,10 +75,16 @@ Console.WriteLine("Calculated!");
 Console.WriteLine();
 
 var result = checker.GetCalculateResult();
-Dictionary<string, (string, string)> toJson = new();
+Dictionary<string, (string, string, long)> toJson = new();
 foreach (var item in result)
 {
-    toJson.Add(item.Key, (item.Value.Item1.ToUpper(), item.Value.Item2.ToUpper()));
+    toJson.Add(item.Key,
+        (
+            item.Value.Item1.ToUpper(),
+            item.Value.Item2.ToUpper(),
+            new FileInfo(Path.GetFullPath($"{baseDir}/{item.Key}")).Length
+        )
+    );
 }
 
 JsonSerializerOptions options = new()
@@ -87,7 +93,7 @@ JsonSerializerOptions options = new()
     IncludeFields = true,
     PropertyNamingPolicy = new StringCoupleNamingPolicy(),
 };
-string json = JsonSerializer.Serialize(toJson, options: options);
+string json = JsonSerializer.Serialize(toJson, options);
 Console.WriteLine(json);
 
 File.WriteAllText(Path.GetFullPath($"{baseDir}/Common.Update.Result.json"), json);
