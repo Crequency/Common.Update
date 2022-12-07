@@ -7,7 +7,7 @@ namespace Common.Update.Replacer.Test
     public class Program_Test
     {
         [TestMethod]
-        public void ²âÊÔÆô¶¯²ÎÊı()
+        public void æµ‹è¯•å¯åŠ¨å‚æ•°()
         {
             Process.Start("./Common.Update.Replacer.exe", "--test-arg");
         }

@@ -1,10 +1,10 @@
-namespace Common.Update.Checker.Test
+锘縩amespace Common.Update.Checker.Test
 {
     [TestClass]
     public class Checker_Test
     {
         [TestMethod]
-        public void Test_Checker_基础功能()
+        public void Test_Checker_鍩虹鍔熻兘()
         {
             string root = @"D:\tmp\";
 
@@ -30,7 +30,7 @@ namespace Common.Update.Checker.Test
         }
 
         [TestMethod]
-        public void 专项测试()
+        public void 涓撻」娴嬭瘯()
         {
             string wd = @"E:\Development\Projects\Crequency\KitX\KitX Build\Dashboard\Debug\net6.0";
             string ld = $"{wd}/Languages";
