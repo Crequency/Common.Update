@@ -332,7 +332,8 @@ namespace Common.Update.Checker
                 foreach (var item in task)
                 {
                     byte[] bytes = File.ReadAllBytes(Path.GetFullPath($"{_rootDir}/{item}"));
-                    string md5 = GetMD5(bytes, _transHash2Str), sha1 = GetSHA1(bytes, _transHash2Str);
+                    string md5 = GetMD5(bytes, _transHash2Str);
+                    string sha1 = GetSHA1(bytes, _transHash2Str);
                     lock (_lockobject)
                     {
                         _hash_md5.Add(item, md5);
@@ -344,5 +345,18 @@ namespace Common.Update.Checker
         }
 
         #endregion
+
+        #region 清理占用
+
+        /// <summary>
+        /// 清理内存占用
+        /// </summary>
+        public void CleanMemoryUsage()
+        {
+            GC.Collect();
+        }
+
+        #endregion
+
     }
 }
