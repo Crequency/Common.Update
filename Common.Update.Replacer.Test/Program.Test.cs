@@ -1,5 +1,4 @@
-using Common.Update.Replacer;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 
 namespace Common.Update.Replacer.Test
 {

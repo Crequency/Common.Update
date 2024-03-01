@@ -1,6 +1,6 @@
-﻿using Common.Update.Checker;
+﻿using System.Text.Json;
+using Common.Update.Checker;
 using Common.Update.Manual;
-using System.Text.Json;
 
 Console.WriteLine("Common.Update.Manual");
 Console.WriteLine("v1.0.0.1");
